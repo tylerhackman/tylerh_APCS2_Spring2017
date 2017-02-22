@@ -1,0 +1,5 @@
+import java.io.*;
+import java.util.*;
+public class FileProcessing {
+	Scanner input = new Scanner (new File("./resources/weather.txt"));
+}

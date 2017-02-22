@@ -1,0 +1,8 @@
+import java.io.*;
+import java.util.*;
+public class FileProcessing {
+	public static void main (String [] args) throws FileNotFoundException {
+	Scanner input = new Scanner (new File("./resources/weather.txt"));
+	System.out.println(input.nextDouble() + input.nextDouble());
+}
+}
