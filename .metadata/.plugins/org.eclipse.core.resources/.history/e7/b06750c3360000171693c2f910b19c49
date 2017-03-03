@@ -6,24 +6,23 @@ public class SpreadsheetLocation implements Location
 {
 	private int columnNumber;
 	private int rowNumber;
-    
-    public int getRow() {
-       return rowNumber;
+    @Override
+    public int getRow()
+    {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
-    
-    public int getCol() {
-        return columnNumber;
+    @Override
+    public int getCol()
+    {
+        // TODO Auto-generated method stub
+        return 0;
     }
     
     public SpreadsheetLocation(String cellName){
         columnNumber = (int) cellName.charAt(0);
-        rowNumber = ParseInt(cellName.substring(1));
-        
+        rowNumber = cellName.
     }
-
-	private int ParseInt(String substring) {
-		return Integer.valueOf(substring);
-	}
 
 }
