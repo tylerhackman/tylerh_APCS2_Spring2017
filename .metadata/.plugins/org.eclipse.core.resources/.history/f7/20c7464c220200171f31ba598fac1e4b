@@ -1,0 +1,31 @@
+package textExcel;
+
+//Update this file with your own code.
+
+public class SpreadsheetLocation implements Location
+{
+	private int columnNumber;
+	private int rowNumber;
+    
+    public int getRow() {
+       return rowNumber;
+    }
+
+    
+    public int getCol() {
+        return columnNumber;
+    }
+    
+    public SpreadsheetLocation(String cellName){
+    	//String column = cellName.substring(0,1).toLowerCase();
+    //	columnNumber = ParseInt(column);
+      //  rowNumber = ParseInt(cellName.substring(1));
+    	System.out.print(Integer.valueOf("l"));
+        
+    }
+
+	private int ParseInt(String substring) {
+		return Integer.valueOf(substring);
+	}
+
+}

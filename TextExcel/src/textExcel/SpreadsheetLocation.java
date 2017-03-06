@@ -17,9 +17,9 @@ public class SpreadsheetLocation implements Location
     }
     
     public SpreadsheetLocation(String cellName){
-        columnNumber = (int) cellName.charAt(0);
-        rowNumber = ParseInt(cellName.substring(1));
-        
+    	columnNumber = Character.getNumericValue(cellName.charAt(0)) - 10;
+    	rowNumber = ParseInt(cellName.substring(1)) - 1;
+
     }
 
 	private int ParseInt(String substring) {

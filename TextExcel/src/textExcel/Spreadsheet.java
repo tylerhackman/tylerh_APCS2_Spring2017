@@ -4,24 +4,21 @@ package textExcel;
 
 public class Spreadsheet implements Grid {
 	
-	private int numberOfRows;
-	private int numberOfColumns;
+	private int numberOfRows = 20;
+	private int numberOfColumns = 12;
 	
-	public Spreadsheet(int rows, int columns) {
-		numberOfRows = rows;
-		numberOfColumns = columns;
-		Cell [][] spreadsheet = new Cell [rows][columns];
-		for(int i = 0; i < rows; i++) {
-			for(int j = 0; j < columns; j++) {
+	public Spreadsheet() {
+		Cell [][] spreadsheet = new Cell [20][12];
+		for(int i = 0; i < 20; i++) {
+			for(int j = 0; j < 12; j++) {
 				spreadsheet [i][j] = new EmptyCell();
 			}
 		}
 	}
 	
-	public String processCommand(String command)
-	{
-		// TODO Auto-generated method stub
-		return null;
+	public String processCommand(String command) {
+		
+		return command;
 	}
 
 	
@@ -35,16 +32,13 @@ public class Spreadsheet implements Grid {
 	}
 
 	
-	public Cell getCell(Location loc)
-	{
+	public Cell getCell(Location loc) {
 		
 		return null;
 	}
 
-	@Override
-	public String getGridText()
-	{
-		// TODO Auto-generated method stub
+	public String getGridText() {
+		
 		return null;
 	}
 
