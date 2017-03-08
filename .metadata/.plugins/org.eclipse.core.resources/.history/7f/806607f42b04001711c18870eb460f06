@@ -17,13 +17,7 @@ public class Spreadsheet implements Grid {
 	}
 	
 	public String processCommand(String command) {
-		int row, column;
-		if(command.length() <= 3) {
-			column = Character.getNumericValue(command.charAt(0)) - 10;
-	    	row = Integer.valueOf((command.substring(1))) - 1;
-	    	
-			
-		}
+		
 		return command;
 	}
 
