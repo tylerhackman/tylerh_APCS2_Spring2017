@@ -44,7 +44,8 @@ public class Spreadsheet implements Grid {
 	}
 
 	public String getGridText() {
-		
+		String grid = "";
+		String firstCell = "   |"
 		return null;
 	}
 
