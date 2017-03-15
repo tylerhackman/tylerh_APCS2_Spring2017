@@ -9,7 +9,7 @@ public class Spreadsheet implements Grid {
 	Cell [][] spreadsheet = new Cell [21][13];
 	
 	public Spreadsheet() {
-	//	Cell [][] spreadsheet = new Cell [20][12];
+		//Cell [][] spreadsheet = new Cell [21][13];
 		for(int i = 1; i < 21; i++) {
 			for(int j = 1; j < 13; j++) {
 				spreadsheet [i][j] = new EmptyCell();
