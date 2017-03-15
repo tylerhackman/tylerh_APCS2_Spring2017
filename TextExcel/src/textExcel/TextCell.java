@@ -26,5 +26,8 @@ public class TextCell implements Cell {
 		
 		return cellContents;
 	}
-
+	
+public void setContents(String newContents){
+	cellContents = newContents;
+}
 }

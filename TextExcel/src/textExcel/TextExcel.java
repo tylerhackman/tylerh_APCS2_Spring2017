@@ -8,14 +8,17 @@ import java.util.Scanner;
 public class TextExcel {
 
 	public static void main(String[] args) {
-	    Spreadsheet spreadsheet = new Spreadsheet();
+	    Spreadsheet Mainspreadsheet = new Spreadsheet();
 	    Scanner userInput  = new Scanner (System.in);
 	    String input = "";
 	    while(!input.equals ("quit")) {
-	    	input = spreadsheet.processCommand(userInput.next());
+	    	input = Mainspreadsheet.processCommand(userInput.nextLine());
 	    		System.out.println(input);
+	    		if (input.equals("string")){
+
+	    			System.out.print(Mainspreadsheet.getGridText());
+	    		}
 	     	
 	    }
-	   
 	}
 }
