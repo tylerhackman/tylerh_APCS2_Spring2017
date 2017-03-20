@@ -10,7 +10,7 @@ public class TextCell implements Cell {
 	public String abbreviatedCellText() {
 		String newCellContents = cellContents;
 		if(cellContents.length() > 10) {
-			return(cellContents.substring(0, 10));
+			return(cellContents.substring(1, 11));
 		}
 		else {
 			for(int i = 0; i < 10 - cellContents.length(); i++) {
