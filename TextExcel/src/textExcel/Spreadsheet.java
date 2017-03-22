@@ -22,24 +22,34 @@ public class Spreadsheet implements Grid {
 		if (command.equals("quit")) {
 			returnString = "quit";
 		}
-		if (command.length() <= 3) {
+		if (command.length() <= 3 && command.length() != 0) {
 			column = Character.getNumericValue(command.charAt(0)) - 9;
 	    	row = Integer.valueOf((command.substring(1))) ;
-	    	
-	    	returnString = (spreadsheet[row][column].fullCellText());
+	    	returnString = spreadsheet[row][column].fullCellText();
 		}
 		if (command.contains("=")) {
 			String [] splitInput = command.split(" ", 3);
-			//Create a new array to split, in order to get rid of the quotation marks.
-			//String [] contentsWithoutQuotes = splitInput[2].split("\"", 3);
-			//TextCell cell = new TextCell(contentsWithoutQuotes[1]);
-			TextCell cell = new TextCell(splitInput[2]);
-
 			SpreadsheetLocation location = new SpreadsheetLocation(splitInput[0]);
-			spreadsheet[location.getRow() + 1][location.getCol() + 1] = cell;		
-			returnString = this.getGridText();	
+			if (splitInput[2].contains("%")) {
+				PercentCell percentCell = new PercentCell(splitInput[2]);
+				spreadsheet[location.getRow() + 1][location.getCol() + 1] = percentCell;	
+			}
+			else {
+				if (isNumeric(splitInput[2])) {
+					ValueCell valueCell = new ValueCell(splitInput[2]);
+					spreadsheet[location.getRow() + 1][location.getCol() + 1] = valueCell;	
+				}
+				else {
+					//Create a new array to split, in order to get rid of the quotation marks.
+					String [] contentsWithoutQuotes = splitInput[2].split("\"", 3);
+					TextCell cell = new TextCell(contentsWithoutQuotes[1]);
+
+					spreadsheet[location.getRow() + 1][location.getCol() + 1] = cell;			
+				}
+			}
+			returnString = this.getGridText();
 		}
-		if(command.equals("clear")) {
+		if(command.toLowerCase().equals("clear")) {
 			Cell [][] clearedSpreadsheet = new Cell[21][13];
 			for(int i = 1; i < 21; i++) {
 				for(int j = 1; j < 13; j++) {
@@ -49,14 +59,33 @@ public class Spreadsheet implements Grid {
 			spreadsheet = clearedSpreadsheet;
 			returnString = this.getGridText();
 		}
-		if(command.contains("clear ")) {
+		if(command.toLowerCase().contains("clear ")) {
 			String [] splitInput2 = command.split(" ", 2);
 			
 			SpreadsheetLocation location = new SpreadsheetLocation(splitInput2[1]);
-			spreadsheet[location.getRow() + 1][location.getCol() + 1] = new EmptyCell();		
+			spreadsheet[location.getRow() + 1][location.getCol() + 1] = new EmptyCell();
 			returnString = this.getGridText();	
 		}
 		return returnString;
+	}
+	
+	public boolean isNumeric(String input) {
+		String testString;
+		if(input.charAt(0) == '-') {			
+			testString = input.substring(1);			
+		}
+		else {
+			testString = input;	
+		}
+	
+		for(int i = 0; i < testString.length(); i ++) {
+			if(testString.charAt(i) != '.') {
+				if(!Character.isDigit(testString.charAt(i))) {
+					return false;
+				}
+			}
+		}
+			return true;
 	}
 
 	
