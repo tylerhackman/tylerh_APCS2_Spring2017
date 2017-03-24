@@ -2,7 +2,7 @@ package textExcel;
 
 public class RealCell implements Cell {
 
-	String userInput;
+	private String userInput;
 	
 	public RealCell (String contents) {
 		userInput = contents;
@@ -31,5 +31,9 @@ public class RealCell implements Cell {
 	public double getDoubleValue() {
 		return Double.parseDouble(userInput);
 	}
-
+	
+	public String getUserInput() {
+		return userInput;
+	}
+	
 }

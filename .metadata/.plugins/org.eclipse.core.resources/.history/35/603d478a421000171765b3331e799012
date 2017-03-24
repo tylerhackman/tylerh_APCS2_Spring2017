@@ -1,0 +1,14 @@
+package textExcel;
+
+public class FormulaCell extends RealCell {
+	
+	private String cellType = "FormulaCell";
+	
+	public FormulaCell(String userInput) {
+		super(userInput);
+	}
+	
+	public double getDoubleValue() {
+		return Double.parseDouble(userInput);
+	}
+}

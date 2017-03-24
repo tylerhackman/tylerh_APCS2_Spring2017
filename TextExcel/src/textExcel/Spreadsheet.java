@@ -1,6 +1,10 @@
 package textExcel;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Spreadsheet implements Grid {
 	
@@ -25,52 +29,171 @@ public class Spreadsheet implements Grid {
 		if (command.length() <= 3 && command.length() != 0) {
 			column = Character.getNumericValue(command.charAt(0)) - 9;
 	    	row = Integer.valueOf((command.substring(1))) ;
+	    	
 	    	returnString = spreadsheet[row][column].fullCellText();
 		}
-		if (command.contains("=")) {
-			String [] splitInput = command.split(" ", 3);
-			SpreadsheetLocation location = new SpreadsheetLocation(splitInput[0]);
-			if (splitInput[2].contains("%")) {
-				PercentCell percentCell = new PercentCell(splitInput[2]);
-				spreadsheet[location.getRow() + 1][location.getCol() + 1] = percentCell;	
-			}
-			else {
-				if (isNumeric(splitInput[2])) {
-					ValueCell valueCell = new ValueCell(splitInput[2]);
-					spreadsheet[location.getRow() + 1][location.getCol() + 1] = valueCell;	
-				}
-				else {
-					//Create a new array to split, in order to get rid of the quotation marks.
-					String [] contentsWithoutQuotes = splitInput[2].split("\"", 3);
-					TextCell cell = new TextCell(contentsWithoutQuotes[1]);
-
-					spreadsheet[location.getRow() + 1][location.getCol() + 1] = cell;			
-				}
-			}
-			returnString = this.getGridText();
-		}
-		if(command.toLowerCase().equals("clear")) {
-			Cell [][] clearedSpreadsheet = new Cell[21][13];
-			for(int i = 1; i < 21; i++) {
-				for(int j = 1; j < 13; j++) {
-					clearedSpreadsheet [i][j] = new EmptyCell();
-				}
-			}
-			spreadsheet = clearedSpreadsheet;
-			returnString = this.getGridText();
-		}
-		if(command.toLowerCase().contains("clear ")) {
-			String [] splitInput2 = command.split(" ", 2);
+		else {
+			if (command.contains("=")) {
+				String [] splitInput = command.split(" ", 3);
+				SpreadsheetLocation location = new SpreadsheetLocation(splitInput[0]);
 			
-			SpreadsheetLocation location = new SpreadsheetLocation(splitInput2[1]);
-			spreadsheet[location.getRow() + 1][location.getCol() + 1] = new EmptyCell();
-			returnString = this.getGridText();	
-		}
+				if (isNumeric(splitInput[2])) {
+						ValueCell valueCell = new ValueCell(splitInput[2]);
+						spreadsheet[location.getRow() + 1][location.getCol() + 1] = valueCell;	
+					}
+				else {
+					if (splitInput[2].contains("%")) {
+					PercentCell percentCell = new PercentCell(splitInput[2]);
+					spreadsheet[location.getRow() + 1][location.getCol() + 1] = percentCell;	
+				}
+					else {
+						if(command.contains("+") || command.contains("-") || command.contains("*") || command.contains("/")) {
+							FormulaCell formulaCell = new FormulaCell(splitInput[2]);
+							spreadsheet[location.getRow() + 1][location.getCol() + 1] = formulaCell;	
+						}
+						else {
+							//Create a new array to split, in order to get rid of the quotation marks.
+							String [] contentsWithoutQuotes = splitInput[2].split("\"", 3);
+							TextCell cell = new TextCell(contentsWithoutQuotes[1]);
+
+							spreadsheet[location.getRow() + 1][location.getCol() + 1] = cell;	
+						}
+					}
+				}
+				returnString = this.getGridText();
+			}
+			if(command.toLowerCase().equals("clear")) {
+				Cell [][] clearedSpreadsheet = new Cell[21][13];
+				for(int i = 1; i < 21; i++) {
+					for(int j = 1; j < 13; j++) {
+						clearedSpreadsheet [i][j] = new EmptyCell();
+					}
+				}
+				spreadsheet = clearedSpreadsheet;
+				returnString = this.getGridText();
+			}
+			if(command.toLowerCase().contains("clear ")) {
+				String [] splitInput2 = command.split(" ", 2);
+			
+				SpreadsheetLocation location = new SpreadsheetLocation(splitInput2[1]);
+				spreadsheet[location.getRow() + 1][location.getCol() + 1] = new EmptyCell();
+				returnString = this.getGridText();	
+			}
+			if(command.substring(0,4).equals("save")){
+				returnString = this.writeToFile(command.substring(5));
+			}
+			if(command.substring(0,4).equals("open")){
+				returnString = this.readFromFile(command.substring(5));
+			}
+		}	
 		return returnString;
 	}
 	
+	private String writeToFile(String filename){ 
+		
+		PrintStream outputFile;
+
+		try {
+		outputFile = new PrintStream(new File(filename));
+		}
+
+		catch (FileNotFoundException e) {
+			return "File not found: " + filename;
+		}
+
+		String line;
+		char cellColumn = 'A';
+		String cellName;
+		String cellType;
+		for (int col = 1; col < 13; col++) {
+			for (int row = 1; row < 21; row++) {
+				cellName = "" + cellColumn + row;
+				if(!spreadsheet[row][col].fullCellText().equals("")) {
+					if(spreadsheet[row][col].abbreviatedCellText().contains("%")) {
+						cellType = "PercentCell";
+					}
+					else {
+						if(spreadsheet[row][col].fullCellText().contains("\"")) {
+							cellType = "TextCell";
+						}
+						else {
+							if(isNumeric(spreadsheet[row][col].fullCellText())) {
+								cellType = "ValueCell";
+							}
+							else {
+								
+								cellType = "FormulaCell";
+							}
+						}
+					}
+					line = cellName + "," + cellType + "," + spreadsheet[row][col].fullCellText();
+					outputFile.println(line);
+				}
+			}
+			cellColumn++;
+		}
+		
+		outputFile.close();
+
+		return this.getGridText();
+
+		}
+
+	private String readFromFile(String filename){
+
+		Scanner inputFile;
+
+		try {
+
+		inputFile = new Scanner(new File(filename));
+
+		}
+
+		catch (FileNotFoundException e) {
+
+		return "File not found: " + filename;
+
+		}
+		String line;
+		String [] splitLine;
+		while(inputFile.hasNextLine()) {
+			line = inputFile.nextLine();
+			splitLine = line.split(",", 3);
+			SpreadsheetLocation location = new SpreadsheetLocation(splitLine[0]);
+			if(splitLine[1].equals("TextCell")) {
+				String [] contentsWithoutQuotes = splitLine[2].split("\"", 3);
+				TextCell cell = new TextCell(contentsWithoutQuotes[1]);
+				spreadsheet[location.getRow() + 1][location.getCol() + 1] = cell;	
+			}
+			else {
+				if(splitLine[1].equals("PercentCell")) {
+					PercentCell percentCell = new PercentCell(splitLine[2]);
+					spreadsheet[location.getRow() + 1][location.getCol() + 1] = percentCell;	
+				}
+				else {
+					if(splitLine[1].equals("FormulaCell")) {
+						FormulaCell formulaCell = new FormulaCell(splitLine[2]);
+						spreadsheet[location.getRow() + 1][location.getCol() + 1] = formulaCell;	
+					}
+					else {
+						ValueCell valueCell = new ValueCell(splitLine[2]);
+						spreadsheet[location.getRow() + 1][location.getCol() + 1] = valueCell;	
+					}
+				}
+			}
+			
+			
+		}
+
+		inputFile.close();
+		
+		return this.getGridText();
+
+		}
+	
 	public boolean isNumeric(String input) {
 		String testString;
+		boolean returnValue = true;
 		if(input.charAt(0) == '-') {			
 			testString = input.substring(1);			
 		}
@@ -81,11 +204,11 @@ public class Spreadsheet implements Grid {
 		for(int i = 0; i < testString.length(); i ++) {
 			if(testString.charAt(i) != '.') {
 				if(!Character.isDigit(testString.charAt(i))) {
-					return false;
+					return !returnValue;
 				}
 			}
 		}
-			return true;
+			return returnValue;
 	}
 
 	
