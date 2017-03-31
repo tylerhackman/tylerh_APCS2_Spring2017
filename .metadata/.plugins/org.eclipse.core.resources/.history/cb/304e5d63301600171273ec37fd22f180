@@ -9,32 +9,32 @@ public class FormulaCell extends RealCell {
 	
 	public String abbreviatedCellText() {
 		String returnString = "";
+		int returnValue
 		String input = getUserInput().substring(1, getUserInput().length()-1);
 		String [] arr = input.split(" ");
-		int returnValue = Integer.valueOf(arr[0]);
 		for(int i = 0; i < arr.length; i++) {
 			if(i != arr.length-1) {
 				if(arr[i+1].equals("+")) {
 					
-						returnValue += (Integer.valueOf(arr[i+2])); 
+						returnValue = ((Integer.valueOf(arr[i]) + Integer.valueOf(arr[i+2]))); 
 					
 				}
 				else {
 					if(arr[i+1].equals("-")) {
 						
-							returnValue -= (Integer.valueOf(arr[i+2])); 
+							returnValue = ((Integer.valueOf(arr[i]) - Integer.valueOf(arr[i+2]))); 
 						
 					}
 					else {
 						if(arr[i+1].equals("*")) {
 							
-							returnValue *= (Integer.valueOf(arr[i+2])); 
+							returnValue = ((Integer.valueOf(arr[i]) * Integer.valueOf(arr[i+2]))); 
 							
 						}
 						else {
 							if(arr[i+1].equals("/")) {
 								
-								returnValue /= (Integer.valueOf(arr[i+2])); 
+								returnValue = ((Integer.valueOf(arr[i]) / Integer.valueOf(arr[i+2]))); 
 								
 							}
 						}
