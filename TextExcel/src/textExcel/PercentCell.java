@@ -7,6 +7,7 @@ public class PercentCell extends RealCell {
 	}
 	
 	public String abbreviatedCellText() {
+		System.out.println(getUserInput());
 		String percent = getUserInput().substring(0, getUserInput().indexOf("."));
 		percent += "%";
 		String returnString = percent;
@@ -22,11 +23,6 @@ public class PercentCell extends RealCell {
 	}
 	
 	public double getDoubleValue() {
-		//if(getUserInput().indexOf(".") > 1) {
-			return (Double.parseDouble(getUserInput().substring(0, getUserInput().indexOf("%")))/100);
-		//}
-		//else {
-			//return (Double.parseDouble(getUserInput().substring(0, getUserInput().indexOf("%"))));
-		//}
+		return (Double.parseDouble(getUserInput().substring(0, getUserInput().indexOf("%")))/100);
 	}
 }

@@ -1,5 +1,7 @@
 package textExcel;
 
+import java.util.Arrays;
+
 public class FormulaCell extends RealCell {
 	
 	
@@ -8,55 +10,43 @@ public class FormulaCell extends RealCell {
 	}
 	
 	public String abbreviatedCellText() {
-		String returnString = "";
-		String input = getUserInput().substring(1, getUserInput().length()-1);
-		String [] arr = input.split(" ");
-		int returnValue = Integer.valueOf(arr[0]);
-		for(int i = 0; i < arr.length; i++) {
-			if(i != arr.length-1) {
-				if(arr[i+1].equals("+")) {
-					
-						returnValue += (Integer.valueOf(arr[i+2])); 
-					
-				}
-				else {
-					if(arr[i+1].equals("-")) {
-						
-							returnValue -= (Integer.valueOf(arr[i+2])); 
-						
-					}
-					else {
-						if(arr[i+1].equals("*")) {
-							
-							returnValue *= (Integer.valueOf(arr[i+2])); 
-							
-						}
-						else {
-							if(arr[i+1].equals("/")) {
-								
-								returnValue /= (Integer.valueOf(arr[i+2])); 
-								
-							}
-						}
-					}
-				}
-			}
-		
-		}
-		returnString = "" + returnValue;
-		if(returnString.length() > 10) {
-			returnString = returnString.substring(0, 10);
+		String cellContents = "" + this.getDoubleValue();
+		String returnString = cellContents;
+		if(cellContents.length() > 10) {
+			return(cellContents.substring(0, 10));
 		}
 		else {
-			for(int i = 0; i < 10 - returnString.length(); i++) {
+			for(int i = 0; i < 10 - cellContents.length(); i++) {
 				returnString += " ";
 			}
+			return returnString;
 		}
-		return returnString;
 	}
 	
 	public double getDoubleValue() {
-		return Double.parseDouble(getUserInput());
+		String [] arr = getUserInput().substring(2, getUserInput().length()-2).split(" ");
+		double value = Double.valueOf(arr[0]);	
+		for(int i = 0; i < arr.length - 1; i += 2) {
+			if(arr[i+1].equals("+")) {
+				value += Double.valueOf(arr[i+2]);
+			}
+			else {
+				if(arr[i+1].equals("-")) {
+					value -= Double.valueOf(arr[i+2]);
+				}
+				else {
+					if(arr[i+1].equals("*")) {
+						value *= Double.valueOf(arr[i+2]);
+					}
+					else {
+						if(arr[i+1].equals("/")) {
+							value /= Double.valueOf(arr[i+2]);
+						}
+					}
+				}
+			}
+		}
+		return value;
 	}
 	/*
 	public boolean isNumeric(String input) {
