@@ -12,7 +12,6 @@ public class Spreadsheet implements Grid {
 	private int numberOfColumns = 12;
 	Cell [][] spreadsheet = new Cell [21][13];
 	
-	//Constructs a new spreadsheet
 	public Spreadsheet() {
 		for(int i = 1; i < 21; i++) {
 			for(int j = 1; j < 13; j++) {
@@ -21,22 +20,17 @@ public class Spreadsheet implements Grid {
 		}
 	}
 	
-	//Processes the user's command and performs various actions depending on what the user's command was
 	public String processCommand(String command) {
 		int row, column;
 		String returnString = "";
-		
-		//Quits the program
 		if (command.equals("quit")) {
 			returnString = "quit";
 		}
 		else {
-			//Returns nothing if the command is blank
 			if(command.equals("")) {
 				returnString = "";
 			}
 			else {
-				//Returns the non-truncated contents of a specified cell
 				if (command.length() <= 3 && command.length() != 0) {
 					column = Character.getNumericValue(command.charAt(0)) - 9;
 					row = Integer.valueOf((command.substring(1))) ;
@@ -44,30 +38,25 @@ public class Spreadsheet implements Grid {
 					returnString = spreadsheet[row][column].fullCellText();
 				}
 				else {
-					//'=' means there is an assignment
 					if (command.contains("=")) {
 						String [] splitInput = command.split(" ", 3);
 						SpreadsheetLocation location = new SpreadsheetLocation(splitInput[0]);
 			
-						//If the value the user is trying to assign is numeric, a value cell is made
 						if (isNumeric(splitInput[2])) {
 							ValueCell valueCell = new ValueCell(splitInput[2]);
 							spreadsheet[location.getRow() + 1][location.getCol() + 1] = valueCell;	
 						}
 						else {
-							//If there is a '%' in the value, a percent cell is made
 							if (splitInput[2].contains("%")) {
 								PercentCell percentCell = new PercentCell(splitInput[2]);
 								spreadsheet[location.getRow() + 1][location.getCol() + 1] = percentCell;	
 							}
 							else {
-								//If there are operators in the value, a formula cell is made
 								if(command.contains("+") || command.contains("-") || command.contains("*") || command.contains("/") && command.indexOf("=") != command.lastIndexOf("=")) {
 									FormulaCell formulaCell = new FormulaCell(splitInput[2]);
 									spreadsheet[location.getRow() + 1][location.getCol() + 1] = formulaCell;	
 								}
 								else {
-									//If none of the other tests pass, a text cell is made
 									//Create a new array to split, in order to get rid of the quotation marks.
 									String [] contentsWithoutQuotes = splitInput[2].split("\"", 3);
 									TextCell cell = new TextCell(contentsWithoutQuotes[1]);
@@ -107,7 +96,6 @@ public class Spreadsheet implements Grid {
 		return returnString;
 	}
 	
-	//Saves a spreadsheet and its contents to a file
 	private String writeToFile(String filename){ 
 		
 		PrintStream outputFile;
@@ -158,7 +146,6 @@ public class Spreadsheet implements Grid {
 
 		}
 
-	//Reads an input file, and creates a spreadsheet from the information in the file
 	private String readFromFile(String filename){
 
 		Scanner inputFile;
@@ -211,7 +198,6 @@ public class Spreadsheet implements Grid {
 
 		}
 	
-	//Tests if a string is numeric (only containing numbers, a '.', or a '-')
 	public boolean isNumeric(String input) {
 		String testString;
 		boolean returnValue = true;
@@ -232,22 +218,21 @@ public class Spreadsheet implements Grid {
 			return returnValue;
 	}
 
-	//Returns the number of rows in the spreadsheet
+	
 	public int getRows() {
 		return numberOfRows;
 	}
 
-	//Returns the number of columns in the spreadsheet
+	
 	public int getCols() {
 		return numberOfColumns;
 	}
 
-	//Returns the cell at a given location in the spreadsheet
+	
 	public Cell getCell(Location loc) {
 		return spreadsheet[loc.getRow() + 1][loc.getCol() + 1];
 	}
 
-	//Returns the entire spreadsheet
 	public String getGridText() {
 		String grid = "";
 		char colCount = 'A';

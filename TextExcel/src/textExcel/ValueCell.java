@@ -2,11 +2,12 @@ package textExcel;
 
 public class ValueCell extends RealCell {
 	
-	
+	//Constructs a new value cell
 	public ValueCell(String userInput) {
 		super(userInput);
 	}
 	
+	//Returns the contents of a value cell truncated to ten spaces
 	public String abbreviatedCellText() {
 		double doubleValue = this.getDoubleValue();
 		String lengthCount = "" + doubleValue;
