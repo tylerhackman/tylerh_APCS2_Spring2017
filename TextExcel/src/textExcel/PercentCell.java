@@ -10,7 +10,6 @@ public class PercentCell extends RealCell {
 	
 	//Returns the contents of a percent cell (in percent form) truncated to ten spaces
 	public String abbreviatedCellText() {
-		System.out.println(getUserInput());
 		String percent = getUserInput().substring(0, getUserInput().indexOf("."));
 		percent += "%";
 		String returnString = percent;

@@ -2,6 +2,6 @@
 <qualifiedTypeNameHistroy>
 <fullyQualifiedTypeName name="java.lang.System"/>
 <fullyQualifiedTypeName name="textExcel.TextExcel"/>
-<fullyQualifiedTypeName name="textExcel.Spreadsheet"/>
 <fullyQualifiedTypeName name="java.util.Arrays"/>
+<fullyQualifiedTypeName name="textExcel.Spreadsheet"/>
 </qualifiedTypeNameHistroy>

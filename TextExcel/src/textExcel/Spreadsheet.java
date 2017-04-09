@@ -10,7 +10,7 @@ public class Spreadsheet implements Grid {
 	
 	private int numberOfRows = 20;
 	private int numberOfColumns = 12;
-	Cell [][] spreadsheet = new Cell [21][13];
+	static Cell [][] spreadsheet = new Cell [21][13];
 	
 	//Constructs a new spreadsheet
 	public Spreadsheet() {
@@ -40,7 +40,7 @@ public class Spreadsheet implements Grid {
 				if (command.length() <= 3 && command.length() != 0) {
 					column = Character.getNumericValue(command.charAt(0)) - 9;
 					row = Integer.valueOf((command.substring(1))) ;
-	    	
+					
 					returnString = spreadsheet[row][column].fullCellText();
 				}
 				else {
@@ -48,11 +48,12 @@ public class Spreadsheet implements Grid {
 					if (command.contains("=")) {
 						String [] splitInput = command.split(" ", 3);
 						SpreadsheetLocation location = new SpreadsheetLocation(splitInput[0]);
-			
+						
+	
 						//If the value the user is trying to assign is numeric, a value cell is made
-						if (isNumeric(splitInput[2])) {
-							ValueCell valueCell = new ValueCell(splitInput[2]);
-							spreadsheet[location.getRow() + 1][location.getCol() + 1] = valueCell;	
+						if (isNumeric(splitInput[2])) {					
+								ValueCell valueCell = new ValueCell(splitInput[2]);
+								spreadsheet[location.getRow() + 1][location.getCol() + 1] = valueCell;	
 						}
 						else {
 							//If there is a '%' in the value, a percent cell is made
@@ -62,17 +63,30 @@ public class Spreadsheet implements Grid {
 							}
 							else {
 								//If there are operators in the value, a formula cell is made
-								if(command.contains("+") || command.contains("-") || command.contains("*") || command.contains("/") && command.indexOf("=") != command.lastIndexOf("=")) {
+								if(command.contains("+") || command.contains("-") || command.contains("*") || command.contains("/")) {
 									FormulaCell formulaCell = new FormulaCell(splitInput[2]);
 									spreadsheet[location.getRow() + 1][location.getCol() + 1] = formulaCell;	
 								}
 								else {
-									//If none of the other tests pass, a text cell is made
-									//Create a new array to split, in order to get rid of the quotation marks.
-									String [] contentsWithoutQuotes = splitInput[2].split("\"", 3);
-									TextCell cell = new TextCell(contentsWithoutQuotes[1]);
-
-									spreadsheet[location.getRow() + 1][location.getCol() + 1] = cell;	
+									if (splitInput[2].substring(0,2).equals("\\\"")) {
+										
+										TextCell cell = new TextCell(splitInput[2]);
+										spreadsheet[location.getRow() + 1][location.getCol() + 1] = cell;	
+									}
+									else {	
+										if (isNumeric(splitInput[2].substring(splitInput[2].indexOf('(')+1, splitInput[2].indexOf(')')).trim())) {
+											String value = splitInput[2].substring(splitInput[2].indexOf('(')+1, splitInput[2].indexOf(')')).trim();
+											ValueCell valueCell = new ValueCell(value);
+											spreadsheet[location.getRow() + 1][location.getCol() + 1] = valueCell;	
+										}
+										else {
+											//If none of the other tests pass, a text cell is made
+											//Create a new array to split, in order to get rid of the quotation marks.
+											String [] contentsWithoutQuotes = splitInput[2].split("\"", 3);
+											TextCell cell = new TextCell(contentsWithoutQuotes[1]);
+											spreadsheet[location.getRow() + 1][location.getCol() + 1] = cell;	
+										}
+									}
 								}
 							}
 						}
