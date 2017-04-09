@@ -25,7 +25,6 @@ public class Spreadsheet implements Grid {
 	public String processCommand(String command) {
 		int row, column;
 		String returnString = "";
-		
 		//Quits the program
 		if (command.equals("quit")) {
 			returnString = "quit";
@@ -62,11 +61,17 @@ public class Spreadsheet implements Grid {
 							}
 							else {
 								//If there are operators in the value, a formula cell is made
-								if(!splitInput[2].substring(0,2).equals("\"\\") && (command.contains("+") || command.contains("-") || command.contains("*") || command.contains("/"))) {
+								if(!splitInput[2].substring(0,1).equals("\"") && (command.contains("+") || command.contains("-") || command.contains("*") || command.contains("/"))) {
 									FormulaCell formulaCell = new FormulaCell(splitInput[2]);
-									spreadsheet[location.getRow() + 1][location.getCol() + 1] = formulaCell;	
+									spreadsheet[location.getRow() + 1][location.getCol() + 1] = formulaCell;
 								}
 								else {
+									if(splitInput[2].charAt(0) == '\"') {
+										String [] contentsWithoutQuotes = splitInput[2].split("\"", 3);
+										TextCell cell = new TextCell(contentsWithoutQuotes[1]);
+										spreadsheet[location.getRow() + 1][location.getCol() + 1] = cell;
+									}
+									else {
 										if (command.contains("(") && isNumeric(splitInput[2].substring(splitInput[2].indexOf('(')+1, splitInput[2].indexOf(')')).trim())) {
 											String value = splitInput[2].substring(splitInput[2].indexOf('(')+1, splitInput[2].indexOf(')')).trim();
 											ValueCell valueCell = new ValueCell(value);
@@ -77,9 +82,11 @@ public class Spreadsheet implements Grid {
 											//Create a new array to split, in order to get rid of the quotation marks.
 											String [] contentsWithoutQuotes = splitInput[2].split("\"", 3);
 											TextCell cell = new TextCell(contentsWithoutQuotes[1]);
-											spreadsheet[location.getRow() + 1][location.getCol() + 1] = cell;	
+											spreadsheet[location.getRow() + 1][location.getCol() + 1] = cell;
 										}
+									}
 								}
+										
 							}
 						}
 						returnString = this.getGridText();
@@ -110,6 +117,7 @@ public class Spreadsheet implements Grid {
 				}	
 			}
 		}
+		
 		return returnString;
 	}
 	
