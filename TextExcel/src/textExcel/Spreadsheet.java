@@ -48,7 +48,6 @@ public class Spreadsheet implements Grid {
 					if (command.contains("=")) {
 						String [] splitInput = command.split(" ", 3);
 						SpreadsheetLocation location = new SpreadsheetLocation(splitInput[0]);
-						
 	
 						//If the value the user is trying to assign is numeric, a value cell is made
 						if (isNumeric(splitInput[2])) {					
@@ -63,18 +62,12 @@ public class Spreadsheet implements Grid {
 							}
 							else {
 								//If there are operators in the value, a formula cell is made
-								if(command.contains("+") || command.contains("-") || command.contains("*") || command.contains("/")) {
+								if(!splitInput[2].substring(0,2).equals("\"\\") && (command.contains("+") || command.contains("-") || command.contains("*") || command.contains("/"))) {
 									FormulaCell formulaCell = new FormulaCell(splitInput[2]);
 									spreadsheet[location.getRow() + 1][location.getCol() + 1] = formulaCell;	
 								}
 								else {
-									if (splitInput[2].substring(0,2).equals("\\\"")) {
-										
-										TextCell cell = new TextCell(splitInput[2]);
-										spreadsheet[location.getRow() + 1][location.getCol() + 1] = cell;	
-									}
-									else {	
-										if (isNumeric(splitInput[2].substring(splitInput[2].indexOf('(')+1, splitInput[2].indexOf(')')).trim())) {
+										if (command.contains("(") && isNumeric(splitInput[2].substring(splitInput[2].indexOf('(')+1, splitInput[2].indexOf(')')).trim())) {
 											String value = splitInput[2].substring(splitInput[2].indexOf('(')+1, splitInput[2].indexOf(')')).trim();
 											ValueCell valueCell = new ValueCell(value);
 											spreadsheet[location.getRow() + 1][location.getCol() + 1] = valueCell;	
@@ -86,7 +79,6 @@ public class Spreadsheet implements Grid {
 											TextCell cell = new TextCell(contentsWithoutQuotes[1]);
 											spreadsheet[location.getRow() + 1][location.getCol() + 1] = cell;	
 										}
-									}
 								}
 							}
 						}
