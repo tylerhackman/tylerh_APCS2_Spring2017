@@ -1,0 +1,12 @@
+package uberkalt;
+
+import java.awt.Graphics2D;
+
+public class Uberkalt {
+	
+	public static void main(String[] args){
+		
+		Window.createWindow();
+		Player x = new Player(100, 100);
+	}
+}

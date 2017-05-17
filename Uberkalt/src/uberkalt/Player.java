@@ -5,6 +5,7 @@ import javax.swing.*;
 
 public class Player {
 	
+	Graphics2D g2d;
 	int x;
 	int y;
 	
@@ -20,8 +21,12 @@ public class Player {
 	
 	public Image getPlayer() {
 		
-		ImageIcon player = new ImageIcon ("C:/Users/APCS2/Desktop/Player.png");
+		ImageIcon player = new ImageIcon ("C:/Users/APCS2/Desktop/player2.png");
 		Image playerImage = player.getImage();
 		return playerImage;
+	}
+	
+	public void update() {
+		
 	}
 }
